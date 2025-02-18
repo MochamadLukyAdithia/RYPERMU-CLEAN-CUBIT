@@ -1,4 +1,4 @@
-# spotify_clean_arch
+# RYPERMU
 
 A new Flutter project.
 
