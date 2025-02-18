@@ -19,10 +19,10 @@ class _HomeScreenState extends State<HomeScreen>
   late TabController tabController;
 
   final List<String> genres = [
-    'Pop',
+    'Populer',
     'Jazz',
     'Rock',
-    'Popular',
+    'Pop',
     'Hip-hop',
     'EDM'
   ];
@@ -38,10 +38,10 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: SvgPicture.asset(
-          AppSvg.logo,
-          height: 40,
-          width: 40,
+        title: Image.asset(
+          AppImage.imageRyper,
+          height: 160,
+          width: 160,
         ),
         centerTitle: true,
       ),
@@ -102,25 +102,70 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget topCard() {
+    double width = MediaQuery.of(context).size.width;
     return Container(
       height: 150,
       child: Stack(
         children: [
           Align(
             alignment: Alignment.bottomCenter,
-            child: SvgPicture.asset(
-              AppSvg.homeTopChart,
+            child: Container(
+              height: 120,
+              width: MediaQuery.of(context).size.width / 1.2,
+              decoration: BoxDecoration(
+                color: AppPallete.primaryColor,
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 54,
+            left: width / 12,
+            child: Column(
+              spacing: 2,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "New Album",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  "Birds Of A Feather",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  "Billie Eilish",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              bottom: 0.3,
-              right: 40,
+            padding: EdgeInsets.only(
+              right: width / 36,
             ),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: Image.asset(
-                AppImage.homeArtist,
+              child: Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  image: DecorationImage(
+                    image: AssetImage(
+                      AppImage.artist,
+                    ),
+                  ),
+                ),
               ),
             ),
           )

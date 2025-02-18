@@ -44,8 +44,14 @@ class NewSongs extends StatelessWidget {
         final dataSong = songs[index];
         return GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SongPlayerScreen(songEntity: dataSong,)));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SongPlayerScreen(
+                  songEntity: dataSong,
+                ),
+              ),
+            );
           },
           child: SizedBox(
             width: 160,
@@ -66,7 +72,7 @@ class NewSongs extends StatelessWidget {
                       child: Container(
                         height: 40,
                         width: 40,
-                        transform: Matrix4.translationValues(5, 5, 0),
+                        transform: Matrix4.translationValues(3, 3, 0),
                         decoration: BoxDecoration(
                           color: context.isDarkMode
                               ? Colors.grey.withOpacity(0.8)
@@ -107,7 +113,7 @@ class NewSongs extends StatelessWidget {
       },
       separatorBuilder: (context, index) {
         return SizedBox(
-          width: 14,
+          width: 20,
         );
       },
       itemCount: songs.length,

@@ -7,4 +7,5 @@ class AppSvg {
   static const String topPattern = "${basePath}top_pattern${format}";
   static const String bootomPattern = "${basePath}bottom_pattern${format}";
   static const String homeTopChart = "${basePath}home_top_card${format}";
+  static const String logoRyper = "${basePath}ryper_logo${format}";
 }

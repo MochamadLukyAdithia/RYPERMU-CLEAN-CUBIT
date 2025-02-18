@@ -28,7 +28,9 @@ class PlaylistSongs extends StatelessWidget {
         }
         if (state is PlaylistLoaded) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+            padding: const EdgeInsets.symmetric(
+              vertical: 40,
+            ),
             child: Column(
               children: [
                 const Row(
@@ -123,7 +125,14 @@ class PlaylistSongs extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Text(songs[index].duration.toString().replaceAll('.', ':')),
+                    Text(
+                      songs[index]
+                          .duration
+                          .toString()
+                          .replaceAll('.', ':')
+                          .padLeft(2, "0")
+                          .padRight(2, "0"),
+                    ),
                     const SizedBox(
                       width: 20,
                     ),

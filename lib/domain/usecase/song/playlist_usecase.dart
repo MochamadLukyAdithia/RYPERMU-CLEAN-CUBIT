@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:spotify_clean_arch/core/usecases/usecase.dart';
-import 'package:spotify_clean_arch/domain/repository/auth/auth.dart';
 import 'package:spotify_clean_arch/domain/repository/song/song_repository.dart';
 import 'package:spotify_clean_arch/service_locator.dart';
 

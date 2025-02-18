@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotify_clean_arch/core/configs/theme/App_Pallete.dart';
 import 'package:spotify_clean_arch/presentation/home/pages/home_screen.dart';
 
 class Wrapper extends StatefulWidget {
@@ -42,28 +43,18 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: pages[currentIndex],
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.5),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          },
-          items: items(),
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
-          backgroundColor: Colors.transparent,
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: items(),
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: AppPallete.primaryColor,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.transparent,
       ),
     );
   }
