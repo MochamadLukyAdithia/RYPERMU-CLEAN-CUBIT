@@ -69,7 +69,7 @@ We welcome contributions from fellow music lovers and developers! 🎸
 
 ## 🧑‍💻 Developers
 
-- 🎯 **RYPER Team** – Software Engineering Students, Faculty of Computer Science, UNEJ.
+- 🎯 **Mochamad Luky Adithia** – Software Engineering Students, Faculty of Computer Science, UNEJ.
 
 🙌 *Made with ❤️ and 🎧 by Ryper Developers.*
 
