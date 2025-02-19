@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_clean_arch/common/helpers/is_dark_mode.dart';
+import 'package:spotify_clean_arch/common/widgets/favorite_button/favorite_button.dart';
 import 'package:spotify_clean_arch/core/configs/theme/App_Pallete.dart';
 import 'package:spotify_clean_arch/domain/entities/song/song_entity.dart';
 import 'package:spotify_clean_arch/presentation/home/bloc/playlist/playlist_songs_cubit.dart';
@@ -123,22 +124,27 @@ class PlaylistSongs extends StatelessWidget {
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    Text(
-                      songs[index]
-                          .duration
-                          .toString()
-                          .replaceAll('.', ':')
-                          .padLeft(2, "0")
-                          .padRight(2, "0"),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.favorite))
-                  ],
-                )
+                Expanded(
+                  child: Row(
+                    children: [
+                      Text(
+                        songs[index]
+                            .duration
+                            .toString()
+                            .replaceAll('.', ':')
+                            .padLeft(2, "0")
+                            .padRight(2, "0"),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      FavoriteButton(
+                        songEntity: songs[index],
+                        function: () {},
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           );

@@ -19,18 +19,19 @@ class BasicButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            minimumSize: Size.fromHeight(
-              height ?? 60,
-            ),
-            backgroundColor: color ?? AppPallete.primaryColor),
-        onPressed: onPressed,
-        child: Text(
-          title,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: textSize ?? 18,
+      style: ElevatedButton.styleFrom(
+          minimumSize: Size.fromHeight(
+            height ?? 60,
           ),
-        ));
+          backgroundColor: color ?? AppPallete.primaryColor),
+      onPressed: onPressed,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: textSize ?? 18,
+        ),
+      ),
+    );
   }
 }

@@ -3,6 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:spotify_clean_arch/data/models/song/song_model.dart';
 import 'package:spotify_clean_arch/domain/entities/song/song_entity.dart';
+import 'package:spotify_clean_arch/domain/usecase/song/is_favorite_usecase.dart';
+import 'package:spotify_clean_arch/service_locator.dart';
 
 abstract class SongFirebaseService {
   Future<Either> getNewSongs();
@@ -18,17 +20,24 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
     try {
       List<SongEntity> songs = [];
       var data = await FirebaseFirestore.instance
-          .collection("Songs")
-          .orderBy("releaseDate", descending: true)
+          .collection('Songs')
+          .orderBy('releaseDate', descending: true)
           .limit(3)
           .get();
-      for (var i in data.docs) {
-        var songModel = SongModel.fromjson(i.data());
+
+      for (var element in data.docs) {
+        var songModel = SongModel.fromJson(element.data());
+        bool isFavorite =
+            await sl<IsFavoriteUseCase>().call(params: element.reference.id);
+        songModel.isFavorite = isFavorite;
+        songModel.songId = element.reference.id;
         songs.add(songModel.toEntity());
       }
+
       return Right(songs);
     } catch (e) {
-      return Left("ERROR OCCURED ${e.toString()}");
+      print(e);
+      return const Left('An error occurred, Please try again.');
     }
   }
 
@@ -36,64 +45,77 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
   Future<Either> getPlaylistSongs() async {
     try {
       List<SongEntity> songs = [];
-      var playlist = await FirebaseFirestore.instance.collection("Songs").get();
-      for (var element in playlist.docs) {
-        var songModel = SongModel.fromjson(element.data());
+      var data = await FirebaseFirestore.instance
+          .collection('Songs')
+          .orderBy('releaseDate', descending: true)
+          .get();
+
+      for (var element in data.docs) {
+        var songModel = SongModel.fromJson(element.data());
+        bool isFavorite =
+            await sl<IsFavoriteUseCase>().call(params: element.reference.id);
+        songModel.isFavorite = isFavorite;
+        songModel.songId = element.reference.id;
         songs.add(songModel.toEntity());
       }
+
       return Right(songs);
-    } on FirebaseException catch (e) {
-      return Left("ERROR OCCURED ${e.toString()}");
+    } catch (e) {
+      print(e);
+      return const Left('An error occurred, Please try again.');
     }
   }
 
   @override
   Future<Either> addFavoriteSongs(String songId) async {
     try {
-      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
       late bool isFavorite;
-      final user = firebaseAuth.currentUser;
+      var user = firebaseAuth.currentUser;
       String uId = user!.uid;
-      QuerySnapshot favoriteSongs = await firestore
-          .collection("Users")
+
+      QuerySnapshot favoriteSongs = await firebaseFirestore
+          .collection('Users')
           .doc(uId)
-          .collection("Favorites")
-          .where("songId", isEqualTo: songId)
+          .collection('Favorites')
+          .where('songId', isEqualTo: songId)
           .get();
+
       if (favoriteSongs.docs.isNotEmpty) {
         await favoriteSongs.docs.first.reference.delete();
         isFavorite = false;
       } else {
-        await firestore
-            .collection("Users")
+        await firebaseFirestore
+            .collection('Users')
             .doc(uId)
-            .collection("Favorites")
-            .add({
-          "songId": songId,
-          "timestamp": Timestamp.now(),
-        });
+            .collection('Favorites')
+            .add({'songId': songId, 'addedDate': Timestamp.now()});
         isFavorite = true;
       }
+
       return Right(isFavorite);
     } catch (e) {
-      return Left("ERROR OCCURED ${e.toString()}");
+      return const Left('An error occurred');
     }
   }
 
   @override
   Future<bool> isFavoriteSongs(String songId) async {
     try {
-      FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      final user = firebaseAuth.currentUser;
+      final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      var user = firebaseAuth.currentUser;
       String uId = user!.uid;
-      QuerySnapshot favoriteSongs = await firestore
-          .collection("Users")
+
+      QuerySnapshot favoriteSongs = await firebaseFirestore
+          .collection('Users')
           .doc(uId)
-          .collection("Favorites")
-          .where("songId", isEqualTo: songId)
+          .collection('Favorites')
+          .where('songId', isEqualTo: songId)
           .get();
+
       if (favoriteSongs.docs.isNotEmpty) {
         return true;
       } else {
@@ -103,39 +125,35 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
       return false;
     }
   }
-  
+
   @override
-  Future<Either> getUserFavoriteSongs() async{
-   try {
+  Future<Either> getUserFavoriteSongs() async {
+    try {
       final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
       var user = firebaseAuth.currentUser;
       List<SongEntity> favoriteSongs = [];
       String uId = user!.uid;
-      QuerySnapshot favoritesSnapshot = await firebaseFirestore.collection(
-        'Users'
-      ).doc(uId)
-      .collection('Favorites')
-      .get();
-      
-      for (var element in favoritesSnapshot.docs) { 
-        String songId = element['songId'];
-        var song = await firebaseFirestore.collection('Songs').doc(songId).get();
-        // SongModel songModel = SongModel.fromJson(song.data()!);
-        // songModel.isFavorite = true;
-        // songModel.songId = songId;
-        // favoriteSongs.add(
-        //   songModel.toEntity()
-        // );
-      }
-      
-      return Right(favoriteSongs);
+      QuerySnapshot favoritesSnapshot = await firebaseFirestore
+          .collection('Users')
+          .doc(uId)
+          .collection('Favorites')
+          .get();
 
+      for (var element in favoritesSnapshot.docs) {
+        String songId = element['songId'];
+        var song =
+            await firebaseFirestore.collection('Songs').doc(songId).get();
+        SongModel songModel = SongModel.fromJson(song.data()!);
+        songModel.isFavorite = true;
+        songModel.songId = songId;
+        favoriteSongs.add(songModel.toEntity());
+      }
+
+      return Right(favoriteSongs);
     } catch (e) {
       print(e);
-      return const Left(
-        'An error occurred'
-      );
+      return const Left('An error occurred');
     }
   }
 }

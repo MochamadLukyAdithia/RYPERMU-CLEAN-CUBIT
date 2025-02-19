@@ -30,7 +30,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<PlaylistUsecase>(PlaylistUsecase());
   //Favorite
   sl.registerSingleton<AddOrRemoveUsecase>(AddOrRemoveUsecase());
-  sl.registerSingleton<IsFavoriteUsecase>(IsFavoriteUsecase());
+  sl.registerSingleton<IsFavoriteUseCase>(IsFavoriteUseCase());
   sl.registerSingleton<GetUserFavoriteSongsUsecase>(
       GetUserFavoriteSongsUsecase());
 }
